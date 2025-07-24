@@ -1,30 +1,48 @@
 '''
 Microsynteny analysis: All-by-all Pairwise Comparisons
-Calculation of syntenic scores and mapping of the synteny in a graph based on the orthogroups computed by Orthofinder
+Calculation of syntenic scores and mapping of the synteny in a graph based on the orthogroups computed by OrthoFinder
 
     Parameters:
         gffs (directory): Containing all the gff files needed for the analysis created by the microsynteny preprocessing
         species order (.txt file): Containing one species name per row (this indicates the order the species will appear in the plots)
-		orthogroups file (.tsv file): Containing the Orthogroup IDs and the protein IDs in each Orthogroup, by species
-
+	species names (.csv file): Containing one scientific species name per row, and the name it will appear in the plot separated by a ; (eg. Homo_sapiens;Human)
+	orthogroups file (.tsv file): Containing the Orthogroup IDs and the protein IDs in each Orthogroup, per species
     Returns:
         Heatmap with Synteny Scores
-		Graph of the Syntenic Map (optional)
+	Graph of the Syntenic Map (optional)
 '''
+
+#syntenic_map_plot = 0 	# 0: NO Syntenic Map, 1: YES Syntenic Map
+#window = 50		# Set the gene window using for the analysis
+#highlight = window + 1	# Set the highlighted gene in the Syntenic Map
+#a = 0.5			# Set the coefficient of the two scores in the combined score (combined = a*pres_abs + (1-a)*lcm_fr)
 
 # Import the libraries that will be needed
 import argparse
 import pandas as pd
 import os
-from test_lala_functions import *
+from microsynteny_analysis_functions import *
 import matplotlib.patches as mpatches
 import seaborn as sns
 import matplotlib.pyplot as plt
+import configparser
 
-syntenic_map_plot = 0
-window = 50
-highlight = window + 1
-a = 0.5
+# Load the config file
+config = configparser.ConfigParser()
+#config.read('~/master_thesis/scripts/Synteny_Analysis_tool/microsynteny_analysis_config.ini')
+config_path = '/home/olympia/master_thesis/scripts/Synteny_Analysis_tool/microsynteny_analysis_config.ini'
+
+if not os.path.exists(config_path):
+    print("File not found:", config_path)
+else:
+    config.read(config_path)
+    print("Sections found:", config.sections())
+# Read values from the [Settings] section
+syntenic_map_plot = config.getint('Settings', 'syntenic_map_plot')
+window = config.getint('Settings', 'window')
+highlight = config.getint('Settings', 'highlight')
+a = config.getfloat('Settings', 'a')
+
 
 # Parse the input files
 parser = argparse.ArgumentParser()

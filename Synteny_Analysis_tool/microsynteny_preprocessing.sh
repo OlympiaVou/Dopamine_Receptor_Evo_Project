@@ -1,22 +1,12 @@
 
+# Runs microsynteny analysis preprocessing and creates files for the microsynteny analysis
+# 	INPUT: a .conf file containing all the information and files needed to run preprocessing
+# 	OUTPUT: gff files containing information in the right format to run microsynteny analysis
 
-# The ID file must contain:
-#	1) the protein IDs in the first column,
-#	2) the Species name in the second column in a specific format (e.g. Homo_sapiens), the same as in the gff
-
-# The gff path must have each gff file in a folder with the same name the species appear in the ID file:
-
-
-#id_file=$1
-#gff_path=$2
-#fasta_path=$3
-#species=$4
-#prot_of_interest=$5
-#window=$6
 
 # Read the variables from the configuration file
 source ./microsynteny_preprocessing_input.conf
-#source ./keep_longest_from_blast.conf
+
 
 # Check if the gff directory exists
 if [[ ! -d "${gff_path}${species}/" ]]; then               # If the dirrectory of the fasta does not exist
